@@ -1,15 +1,19 @@
-import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { IBM_Plex_Sans_Arabic } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
 
-const geist = Geist({ 
+/* ======================
+   Fonts
+====================== */
+
+const geist = Geist({
   subsets: ["latin"],
   variable: "--font-geist",
 });
 
-const geistMono = Geist_Mono({ 
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
@@ -20,52 +24,94 @@ const ibmPlexArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-arabic",
 });
 
+/* ======================
+   SEO / Metadata
+====================== */
+
 export const metadata: Metadata = {
-  title: 'Souk | سوق - Build Your Online Store',
-  description: 'Create your own e-commerce website with custom domain and powerful dashboard. Launch your store in minutes. أنشئ متجرك الإلكتروني بنطاقك الخاص ولوحة تحكم متكاملة.',
-  keywords: ['e-commerce', 'online store', 'متجر إلكتروني', 'سوق', 'souk', 'website builder'],
-  generator: 'v0.app',
-  icons: {
-    icon: [
+  metadataBase: new URL("https://souq-jo.com"),
+
+  title: {
+    default: "Souq-JO | شريك المشاريع الصغيرة",
+    template: "%s | Souq-JO",
+  },
+
+  description:
+    "أطلق متجرك الإلكتروني خلال دقائق مع نطاقك الخاص، لوحة تحكم ذكية، ووسائل دفع آمنة. كل ما تحتاجه للبيع أونلاين في منصة واحدة.",
+
+  keywords: [
+    "منصة متاجر إلكترونية",
+    "مشاريع صغيرة",
+    "SaaS",
+    "بيع أونلاين",
+    "متجر إلكتروني",
+    "Souq-JO",
+    "E-commerce Jordan",
+  ],
+
+  alternates: {
+    canonical: "https://souq-jo.com",
+  },
+
+  openGraph: {
+    title: "Souq-JO | شريك المشاريع الصغيرة",
+    description:
+      "منصة متاجر إلكترونية متكاملة للمشاريع الصغيرة. أطلق متجرك، راقب أداءك، ووسّع تجارتك من مكان واحد.",
+    url: "https://souq-jo.com",
+    siteName: "Souq-JO",
+    locale: "ar_JO",
+    type: "website",
+    images: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Souq-JO Platform",
       },
     ],
-    apple: '/apple-icon.png',
   },
-  openGraph: {
-    title: 'Souk | سوق - Build Your Online Store',
-    description: 'Create your own e-commerce website with custom domain and powerful dashboard.',
-    type: 'website',
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Souq-JO | شريك المشاريع الصغيرة",
+    description:
+      "أطلق متجرك الإلكتروني خلال دقائق مع أدوات ذكية ونظام دفع آمن.",
+    images: ["/og.png"],
   },
-}
+
+  icons: {
+    icon: "/Logo.png",
+    apple: "/Logo.png",
+  },
+};
+
+/* ======================
+   Viewport
+====================== */
 
 export const viewport: Viewport = {
-  themeColor: '#e37a23',
-  width: 'device-width',
+  width: "device-width",
   initialScale: 1,
-}
+  themeColor: "#e37a23",
+};
+
+/* ======================
+   Root Layout
+====================== */
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ar" dir="rtl" className="bg-background">
-      <body className={`${geist.variable} ${geistMono.variable} ${ibmPlexArabic.variable} font-sans antialiased`}>
+      <body
+        className={`${geist.variable} ${geistMono.variable} ${ibmPlexArabic.variable} font-sans antialiased`}
+      >
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
-  )
+  );
 }

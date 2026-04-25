@@ -99,9 +99,7 @@ export function Hero() {
             </div>
             <div className="hidden sm:block w-1 h-1 rounded-full bg-muted-foreground/30" />
             <div className="flex items-center gap-2">
-              <span>{t("hero.trustedBy")}</span>
-              <span className="font-bold text-foreground">10,000+</span>
-              <span>{t("hero.merchants")}</span>
+              <span>{t("hero.weBuild")}</span>
             </div>
           </motion.div>
         </div>

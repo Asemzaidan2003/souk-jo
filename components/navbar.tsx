@@ -15,8 +15,8 @@ export function Navbar() {
   const navItems = [
     { key: "nav.features", href: "#features" },
     { key: "nav.pricing", href: "#pricing" },
-    { key: "nav.templates", href: "#templates" },
     { key: "nav.support", href: "#support" },
+    { key: "nav.AboutUs" , href: "#aboutUs" },
   ]
 
   const toggleLanguage = () => {
@@ -32,15 +32,10 @@ export function Navbar() {
       className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-18">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">س</span>
-            </div>
-            <span className="font-bold text-xl text-foreground">
-              {locale === "ar" ? "سوق" : "Souk"}
-            </span>
+            <img src="/Logo.png" alt="Souq Logo" className="w-18 h-18" />
           </a>
 
           {/* Desktop Navigation */}
