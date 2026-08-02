@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect} from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ShoppingCart, Search, ChevronDown, Globe, User, Menu, X } from "lucide-react"
@@ -10,11 +10,27 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { useApp } from "@/context/AppContext";
+import {getUserDataFromStorage} from "@/util/AuthInitializer";
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { logo, name } = useApp();
-  
+  // 1. Start with null so server and client match initially
+  const [userData, setUserData] = useState({
+    userId: null,
+    userName: null,
+    userEmail: null,
+    userRole: null,
+  });
+
+  // 2. Load storage data ONLY on the client after hydration
+  useEffect(() => {
+    const data = getUserDataFromStorage();
+    setUserData(data);
+  }, []);
+
+  const { userId, userName, userEmail, userRole } = userData;
+
   const categories = [
     { label: "Food", slug: "food" },
     { label: "Accessories", slug: "accessories" },
@@ -27,12 +43,7 @@ export default function NavBar() {
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center gap-2">
             {/*This src will be taken from the cash data, or will use the default image*/}
-            <Image
-              src={logo}
-              alt={name + " Logo"}
-              width={40}
-              height={40}
-            />
+            <Image src={logo} alt={name + " Logo"} width={40} height={40} />
             <span className="text-xl font-bold">{name}</span>
           </Link>
           {/* This Navigation will be dynamically generated based on the store's categories */}
@@ -75,47 +86,54 @@ export default function NavBar() {
             </div>
           </div>
           {/*This will be changed later */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Globe className="h-5 w-5" />
-                <span className="sr-only">Language</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>English</DropdownMenuItem>
-              <DropdownMenuItem>Spanish</DropdownMenuItem>
-              <DropdownMenuItem>French</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="ghost" size="icon" className="relative" asChild>
-            <Link href="/login">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Sign In</span>
-            </Link>
-          </Button>
-          <Button variant="ghost" size="icon" className="relative" asChild>
-            <Link href="/cart">
-              <ShoppingCart className="h-5 w-5" />
-              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-primary">
-                3
-              </Badge>
-              <span className="sr-only">Cart</span>
-            </Link>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5" />
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                  <Globe className="h-5 w-5" />
+                  <span className="sr-only">Language</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>English</DropdownMenuItem>
+                <DropdownMenuItem>Spanish</DropdownMenuItem>
+                <DropdownMenuItem>French</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {userId ? (
+              <span></span>
             ) : (
-              <Menu className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative" asChild>
+                <Link href="/login">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Sign In</span>
+                </Link>
+              </Button>
             )}
-            <span className="sr-only">Menu</span>
-          </Button>
+
+            <Button variant="ghost" size="icon" className="relative" asChild>
+              <Link href="/cart">
+                <ShoppingCart className="h-5 w-5" />
+                <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-primary">
+                  3
+                </Badge>
+                <span className="sr-only">Cart</span>
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+              <span className="sr-only">Menu</span>
+            </Button>
+          </div>
         </div>
       </div>
       {/* Mobile Menu */}
